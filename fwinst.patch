@@ -1,0 +1,31 @@
+diff -aur sixfireusb-0.6.2/fwinst.sh sixfireusb-0.6.2/fwinst.sh
+--- sixfireusb-0.6.2/fwinst.sh	2016-01-13 12:32:46.658997492 +0100
++++ sixfireusb-0.6.2/fwinst.sh	2016-01-13 12:59:59.438633828 +0100
+@@ -19,7 +19,7 @@
+ # (at your option) any later version.
+ #
+
+-export FW_PATH=/lib/firmware
++export FW_PATH=$1/usr/lib/firmware
+ export FW_6FIRE_PATH=$FW_PATH/6fire
+ cleanup() {
+   rm -Rf /tmp/dmx
+@@ -76,8 +76,8 @@
+ fi
+ step_success
+
+-step_begin "Checking MD-5 checksum of windows driver"
+-if ! echo "86049155f9326a77329d87f7b027a8b9  /tmp/dmx.exe" | md5sum -c >/dev/null 2>&1 ; then
++step_begin "Checking SHA512 checksum of windows driver"
++if ! echo "4a71d2cbf092b0c13afc4ec475e9b6eca48f68e3ca47cff96ffb71bc51dea09c0b19a0e90150ac40cbcf231bc3570e187dc9cb447c2a309472c1e237d501c5b1  /tmp/dmx.exe" | sha512sum -c >/dev/null 2>&1 ; then
+   step_error "Downloaded windows driver has wrong MD-5 checksum."
+ fi
+ step_success
+@@ -106,7 +106,7 @@
+ fi
+
+ step_begin "Installing firmware files"
+-if ! mkdir -p $FW_6FIRE_PATH >/dev/null 2>&1 ; then
++if ! install -dm755 $FW_6FIRE_PATH >/dev/null 2>&1 ; then
+   step_error "Creation of firmware path failed. Are you root?"
+ fi
